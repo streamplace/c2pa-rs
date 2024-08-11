@@ -120,6 +120,7 @@ pub mod tests {
         let ps384 = test_signer(SigningAlg::Ps384);
         let ps512 = test_signer(SigningAlg::Ps512);
         let es256 = test_signer(SigningAlg::Es256);
+        let es256 = test_signer(SigningAlg::Es256k);
         let es384 = test_signer(SigningAlg::Es384);
         let es512 = test_signer(SigningAlg::Es512);
         let ed25519 = test_signer(SigningAlg::Ed25519);
@@ -128,6 +129,7 @@ pub mod tests {
         let ps384_certs = ps384.certs().unwrap();
         let ps512_certs = ps512.certs().unwrap();
         let es256_certs = es256.certs().unwrap();
+        let es256k_certs = es256k.certs().unwrap();
         let es384_certs = es384.certs().unwrap();
         let es512_certs = es512.certs().unwrap();
         let ed25519_certs = ed25519.certs().unwrap();
@@ -136,6 +138,7 @@ pub mod tests {
         assert!(verify_trust(&cap, &ps384_certs[1..], &ps384_certs[0], None).unwrap());
         assert!(verify_trust(&cap, &ps512_certs[1..], &ps512_certs[0], None).unwrap());
         assert!(verify_trust(&cap, &es256_certs[1..], &es256_certs[0], None).unwrap());
+        assert!(verify_trust(&cap, &es256k_certs[1..], &es256k_certs[0], None).unwrap());
         assert!(verify_trust(&cap, &es384_certs[1..], &es384_certs[0], None).unwrap());
         assert!(verify_trust(&cap, &es512_certs[1..], &es512_certs[0], None).unwrap());
         assert!(verify_trust(&cap, &ed25519_certs[1..], &ed25519_certs[0], None).unwrap());
@@ -150,6 +153,7 @@ pub mod tests {
         let ps384 = test_signer(SigningAlg::Ps384);
         let ps512 = test_signer(SigningAlg::Ps512);
         let es256 = test_signer(SigningAlg::Es256);
+        let es256k = test_signer(SigningAlg::Es256k);
         let es384 = test_signer(SigningAlg::Es384);
         let es512 = test_signer(SigningAlg::Es512);
         let ed25519 = test_signer(SigningAlg::Ed25519);
@@ -158,6 +162,7 @@ pub mod tests {
         let ps384_certs = ps384.certs().unwrap();
         let ps512_certs = ps512.certs().unwrap();
         let es256_certs = es256.certs().unwrap();
+        let es256k_certs = es256k.certs().unwrap();
         let es384_certs = es384.certs().unwrap();
         let es512_certs = es512.certs().unwrap();
         let ed25519_certs = ed25519.certs().unwrap();
@@ -167,6 +172,7 @@ pub mod tests {
         assert!(!verify_trust(&cap, &ps384_certs[2..], &ps384_certs[0], None).unwrap());
         assert!(!verify_trust(&cap, &ps512_certs[2..], &ps512_certs[0], None).unwrap());
         assert!(!verify_trust(&cap, &es256_certs[2..], &es256_certs[0], None).unwrap());
+        assert!(!verify_trust(&cap, &es256k_certs[2..], &es256k_certs[0], None).unwrap());
         assert!(!verify_trust(&cap, &es384_certs[2..], &es384_certs[0], None).unwrap());
         assert!(!verify_trust(&cap, &es512_certs[2..], &es512_certs[0], None).unwrap());
         assert!(!verify_trust(&cap, &ed25519_certs[2..], &ed25519_certs[0], None).unwrap());
@@ -181,6 +187,7 @@ pub mod tests {
         let ps384 = test_signer(SigningAlg::Ps384);
         let ps512 = test_signer(SigningAlg::Ps512);
         let es256 = test_signer(SigningAlg::Es256);
+        let es256k = test_signer(SigningAlg::Es256k);
         let es384 = test_signer(SigningAlg::Es384);
         let es512 = test_signer(SigningAlg::Es512);
         let ed25519 = test_signer(SigningAlg::Ed25519);
@@ -189,6 +196,7 @@ pub mod tests {
         let ps384_certs = ps384.certs().unwrap();
         let ps512_certs = ps512.certs().unwrap();
         let es256_certs = es256.certs().unwrap();
+        let es256k_certs = es256k.certs().unwrap();
         let es384_certs = es384.certs().unwrap();
         let es512_certs = es512.certs().unwrap();
         let ed25519_certs = ed25519.certs().unwrap();
