@@ -2,7 +2,7 @@
 
 This folder contains certificates, private keys, and signature results that are used by unit tests. These certificates are not intended for production use.  
 
-The certificates are organized by supported C2PA signing algorithm. For each supported signing algorithm (ps256, ps384, ps512, es256, es384, es512, ed25519), there are four files:
+The certificates are organized by supported C2PA signing algorithm. For each supported signing algorithm (ps256, ps384, ps512, es256, es256k, es384, es512, ed25519), there are four files:
 
 * {alg}.priv - private signing key in PEM format
 * {alg}.pub - certificate chain from signing certificate to the last certificate before the root CA, as a concatenated list of certficates

@@ -29,10 +29,10 @@ use serde::{Deserialize, Serialize};
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[cfg_attr(feature = "json_schema", derive(JsonSchema))]
 pub enum SigningAlg {
-    /// ECDSA with SHA-256
+    /// ECDSA with SHA-256 (secp256r1 curve)
     Es256,
 
-    /// ECDSA with SHA-256
+    /// ECDSA with SHA-256 (secp256k1 curve)
     Es256k,
 
     /// ECDSA with SHA-384
