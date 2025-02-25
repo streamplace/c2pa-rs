@@ -162,6 +162,11 @@ fn signing_alg_to_sig_and_hash_oid(alg: &str) -> Option<(bcder::Oid, bcder::Oid)
             ans1_oid_bcder_oid(&EC_PUBLICKEY_OID)?,
             ans1_oid_bcder_oid(&SHA256_OID)?,
         ))
+    } else if alg == "es256k" {
+        Some((
+            ans1_oid_bcder_oid(&EC_PUBLICKEY_OID)?,
+            ans1_oid_bcder_oid(&SHA256_OID)?,
+        ))
     } else if alg == "es384" {
         Some((
             ans1_oid_bcder_oid(&EC_PUBLICKEY_OID)?,
@@ -197,6 +202,7 @@ fn signing_alg_to_sig_and_hash_oid(alg: &str) -> Option<(bcder::Oid, bcder::Oid)
     }
 }
 
+
 fn cert_signing_alg(cert: &X509Certificate) -> Option<String> {
     let cert_alg = &cert.signature_algorithm.algorithm;
 
@@ -207,7 +213,22 @@ fn cert_signing_alg(cert: &X509Certificate) -> Option<String> {
     } else if *cert_alg == SHA512_WITH_RSAENCRYPTION_OID {
         Some("rsa512".to_string())
     } else if *cert_alg == ECDSA_WITH_SHA256_OID {
-        Some(SigningAlg::Es256.to_string())
+        let public_key = cert.public_key();
+        let algorithm = &public_key.algorithm;
+        
+        if algorithm.algorithm != EC_PUBLICKEY_OID {
+            return None;
+        }
+    
+        let parameters = algorithm.parameters.as_ref()?;
+        let curve_oid = parameters.as_oid().ok()?;
+        if curve_oid == PRIME256V1_OID {
+            Some(SigningAlg::Es256.to_string())
+        } else if curve_oid == SECP256K1_OID {
+            Some(SigningAlg::Es256k.to_string())
+        } else {
+            None
+        }
     } else if *cert_alg == ECDSA_WITH_SHA384_OID {
         Some(SigningAlg::Es384.to_string())
     } else if *cert_alg == ECDSA_WITH_SHA512_OID {

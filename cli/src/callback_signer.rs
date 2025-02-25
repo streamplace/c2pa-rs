@@ -92,7 +92,7 @@ impl SignCallback for ExternalProcessRunner {
 pub(crate) struct CallbackSignerConfig {
     /// Signing algorithm to use - must match the associated certs
     ///
-    /// Must be one of [ ps256 | ps384 | ps51024 | es256 | es384 | es51024 | ed25519 ]
+    /// Must be one of [ ps256 | ps384 | ps51024 | es256 | es256k | es384 | es51024 | ed25519 ]
     pub alg: SigningAlg,
     /// A path to a file containing the signing cert required for signing
     pub sign_cert_path: PathBuf,

@@ -109,12 +109,12 @@ echo "" > trust/allowed_list.hash
 echo "" > trust/allowed_list.pem
 echo "" > trust/test_cert_root_bundle.pem
 
-generate es256 $(ecparam prime256v1) "-sha256" "-sha256"
+# generate es256 $(ecparam prime256v1) "-sha256" "-sha256"
 generate es256k $(ecparam secp256k1) "-sha256" "-sha256"
-generate es384 $(ecparam secp384r1) "-sha384" "-sha384"
-generate es512 $(ecparam secp521r1) "-sha256" "-sha256"
-generate ed25519 ed25519 "-sha256" "-sha256"
-generate ps256 rsa-pss "-pkeyopt rsa_pss_keygen_saltlen:32 -pkeyopt rsa_keygen_bits:4096 -pkeyopt rsa_pss_keygen_md:sha256 -pkeyopt rsa_pss_keygen_mgf1_md:sha256" "-sha256"
-generate ps384 rsa-pss "-pkeyopt rsa_pss_keygen_saltlen:32 -pkeyopt rsa_keygen_bits:4096 -pkeyopt rsa_pss_keygen_md:sha384 -pkeyopt rsa_pss_keygen_mgf1_md:sha384" "-sha384"
-generate ps512 rsa-pss "-pkeyopt rsa_pss_keygen_saltlen:32 -pkeyopt rsa_keygen_bits:4096 -pkeyopt rsa_pss_keygen_md:sha512 -pkeyopt rsa_pss_keygen_mgf1_md:sha512" "-sha512"
-generate rs256 rsa:4096 "-sha256" "-sha256"
+# generate es384 $(ecparam secp384r1) "-sha384" "-sha384"
+# generate es512 $(ecparam secp521r1) "-sha256" "-sha256"
+# generate ed25519 ed25519 "-sha256" "-sha256"
+# generate ps256 rsa-pss "-pkeyopt rsa_pss_keygen_saltlen:32 -pkeyopt rsa_keygen_bits:4096 -pkeyopt rsa_pss_keygen_md:sha256 -pkeyopt rsa_pss_keygen_mgf1_md:sha256" "-sha256"
+# generate ps384 rsa-pss "-pkeyopt rsa_pss_keygen_saltlen:32 -pkeyopt rsa_keygen_bits:4096 -pkeyopt rsa_pss_keygen_md:sha384 -pkeyopt rsa_pss_keygen_mgf1_md:sha384" "-sha384"
+# generate ps512 rsa-pss "-pkeyopt rsa_pss_keygen_saltlen:32 -pkeyopt rsa_keygen_bits:4096 -pkeyopt rsa_pss_keygen_md:sha512 -pkeyopt rsa_pss_keygen_mgf1_md:sha512" "-sha512"
+# generate rs256 rsa:4096 "-sha256" "-sha256"

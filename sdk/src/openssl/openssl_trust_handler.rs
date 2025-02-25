@@ -120,7 +120,7 @@ pub mod tests {
         let ps384 = test_signer(SigningAlg::Ps384);
         let ps512 = test_signer(SigningAlg::Ps512);
         let es256 = test_signer(SigningAlg::Es256);
-        let es256 = test_signer(SigningAlg::Es256k);
+        let es256k = test_signer(SigningAlg::Es256k);
         let es384 = test_signer(SigningAlg::Es384);
         let es512 = test_signer(SigningAlg::Es512);
         let ed25519 = test_signer(SigningAlg::Ed25519);

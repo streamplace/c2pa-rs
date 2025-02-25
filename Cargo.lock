@@ -816,6 +816,7 @@ dependencies = [
  "getrandom",
  "hex",
  "js-sys",
+ "k256",
  "nom",
  "num-bigint-dig",
  "openssl",
@@ -2503,6 +2504,20 @@ checksum = "a32280817bc6e0dbd9aa2abfe52b8fe7405bebc33995649525ecc13ececc3b59"
 dependencies = [
  "nom",
  "thiserror 1.0.69",
+]
+
+[[package]]
+name = "k256"
+version = "0.13.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f6e3919bbaa2945715f0bb6d3934a173d1e9a59ac23767fbaaef277265a7411b"
+dependencies = [
+ "cfg-if",
+ "ecdsa",
+ "elliptic-curve",
+ "once_cell",
+ "sha2",
+ "signature",
 ]
 
 [[package]]

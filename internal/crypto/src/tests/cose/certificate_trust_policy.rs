@@ -267,6 +267,8 @@ fn test_trust_store() {
     #[cfg(not(target_arch = "wasm32"))]
     let es256 = test_signer(SigningAlg::Es256);
     #[cfg(not(target_arch = "wasm32"))]
+    let es256k = test_signer(SigningAlg::Es256k);
+    #[cfg(not(target_arch = "wasm32"))]
     let es384 = test_signer(SigningAlg::Es384);
     #[cfg(not(target_arch = "wasm32"))]
     let es512 = test_signer(SigningAlg::Es512);
@@ -277,6 +279,8 @@ fn test_trust_store() {
     let ps512_certs = ps512.cert_chain().unwrap();
     #[cfg(not(target_arch = "wasm32"))]
     let es256_certs = es256.cert_chain().unwrap();
+    #[cfg(not(target_arch = "wasm32"))]
+    let es256k_certs = es256k.cert_chain().unwrap();
     #[cfg(not(target_arch = "wasm32"))]
     let es384_certs = es384.cert_chain().unwrap();
     #[cfg(not(target_arch = "wasm32"))]
@@ -291,6 +295,9 @@ fn test_trust_store() {
         .unwrap();
     #[cfg(not(target_arch = "wasm32"))]
     ctp.check_certificate_trust(&es256_certs[1..], &es256_certs[0], None)
+        .unwrap();
+    #[cfg(not(target_arch = "wasm32"))]
+    ctp.check_certificate_trust(&es256k_certs[1..], &es256k_certs[0], None)
         .unwrap();
     #[cfg(not(target_arch = "wasm32"))]
     ctp.check_certificate_trust(&es384_certs[1..], &es384_certs[0], None)
@@ -315,6 +322,7 @@ async fn test_trust_store_async() {
     let ps384_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ps384.pub"));
     let ps512_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ps512.pub"));
     let es256_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es256.pub"));
+    let es256k_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es256k.pub"));
     let es384_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es384.pub"));
     let es512_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es512.pub"));
     let ed25519_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ed25519.pub"));
@@ -329,6 +337,9 @@ async fn test_trust_store_async() {
         .await
         .unwrap();
     ctp.check_certificate_trust_async(&es256_certs[1..], &es256_certs[0], None)
+        .await
+        .unwrap();
+    ctp.check_certificate_trust_async(&es256k_certs[1..], &es256k_certs[0], None)
         .await
         .unwrap();
     ctp.check_certificate_trust_async(&es384_certs[1..], &es384_certs[0], None)
@@ -434,6 +445,7 @@ async fn test_broken_trust_chain_async() {
     let ps384_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ps384.pub"));
     let ps512_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ps512.pub"));
     let es256_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es256.pub"));
+    let es256k_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es256k.pub"));
     let es384_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es384.pub"));
     let es512_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es512.pub"));
     let ed25519_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ed25519.pub"));
@@ -475,6 +487,13 @@ async fn test_broken_trust_chain_async() {
     );
 
     assert_eq!(
+        ctp.check_certificate_trust_async(&es256k_certs[2..], &es256k_certs[0], None)
+            .await
+            .unwrap_err(),
+        CertificateTrustError::CertificateNotTrusted
+    );
+
+    assert_eq!(
         ctp.check_certificate_trust_async(&es384_certs[2..], &es384_certs[0], None)
             .await
             .unwrap_err(),
@@ -504,6 +523,8 @@ fn test_allowed_list() {
         .unwrap();
     ctp.add_end_entity_credentials(include_bytes!("../fixtures/raw_signature/es256.pub"))
         .unwrap();
+    ctp.add_end_entity_credentials(include_bytes!("../fixtures/raw_signature/es256k.pub"))
+        .unwrap();
     ctp.add_end_entity_credentials(include_bytes!("../fixtures/raw_signature/es384.pub"))
         .unwrap();
     ctp.add_end_entity_credentials(include_bytes!("../fixtures/raw_signature/es512.pub"))
@@ -521,6 +542,8 @@ fn test_allowed_list() {
     #[cfg(not(target_arch = "wasm32"))]
     let es256 = test_signer(SigningAlg::Es256);
     #[cfg(not(target_arch = "wasm32"))]
+    let es256k = test_signer(SigningAlg::Es256k);
+    #[cfg(not(target_arch = "wasm32"))]
     let es384 = test_signer(SigningAlg::Es384);
     #[cfg(not(target_arch = "wasm32"))]
     let es512 = test_signer(SigningAlg::Es512);
@@ -531,6 +554,8 @@ fn test_allowed_list() {
     let ps512_certs = ps512.cert_chain().unwrap();
     #[cfg(not(target_arch = "wasm32"))]
     let es256_certs = es256.cert_chain().unwrap();
+    #[cfg(not(target_arch = "wasm32"))]
+    let es256k_certs = es256k.cert_chain().unwrap();
     #[cfg(not(target_arch = "wasm32"))]
     let es384_certs = es384.cert_chain().unwrap();
     #[cfg(not(target_arch = "wasm32"))]
@@ -545,6 +570,9 @@ fn test_allowed_list() {
         .unwrap();
     #[cfg(not(target_arch = "wasm32"))]
     ctp.check_certificate_trust(&es256_certs[1..], &es256_certs[0], None)
+        .unwrap();
+    #[cfg(not(target_arch = "wasm32"))]
+    ctp.check_certificate_trust(&es256k_certs[1..], &es256k_certs[0], None)
         .unwrap();
     #[cfg(not(target_arch = "wasm32"))]
     ctp.check_certificate_trust(&es384_certs[1..], &es384_certs[0], None)
@@ -569,6 +597,8 @@ async fn test_allowed_list_async() {
         .unwrap();
     ctp.add_end_entity_credentials(include_bytes!("../fixtures/raw_signature/es256.pub"))
         .unwrap();
+    ctp.add_end_entity_credentials(include_bytes!("../fixtures/raw_signature/es256k.pub"))
+        .unwrap();
     ctp.add_end_entity_credentials(include_bytes!("../fixtures/raw_signature/es384.pub"))
         .unwrap();
     ctp.add_end_entity_credentials(include_bytes!("../fixtures/raw_signature/es512.pub"))
@@ -584,6 +614,7 @@ async fn test_allowed_list_async() {
     let ps384_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ps384.pub"));
     let ps512_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ps512.pub"));
     let es256_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es256.pub"));
+    let es256k_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es256k.pub"));
     let es384_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es384.pub"));
     let es512_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es512.pub"));
     let ed25519_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ed25519.pub"));
@@ -598,6 +629,9 @@ async fn test_allowed_list_async() {
         .await
         .unwrap();
     ctp.check_certificate_trust_async(&es256_certs[1..], &es256_certs[0], None)
+        .await
+        .unwrap();
+    ctp.check_certificate_trust_async(&es256k_certs[1..], &es256k_certs[0], None)
         .await
         .unwrap();
     ctp.check_certificate_trust_async(&es384_certs[1..], &es384_certs[0], None)
@@ -624,6 +658,7 @@ fn test_allowed_list_hashes() {
     let ps384_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ps384.pub"));
     let ps512_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ps512.pub"));
     let es256_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es256.pub"));
+    let es256k_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es256k.pub"));
     let es384_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es384.pub"));
     let es512_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es512.pub"));
     let ed25519_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ed25519.pub"));
@@ -635,6 +670,8 @@ fn test_allowed_list_hashes() {
     ctp.check_certificate_trust(&ps512_certs[1..], &ps512_certs[0], None)
         .unwrap();
     ctp.check_certificate_trust(&es256_certs[1..], &es256_certs[0], None)
+        .unwrap();
+    ctp.check_certificate_trust(&es256k_certs[1..], &es256k_certs[0], None)
         .unwrap();
     ctp.check_certificate_trust(&es384_certs[1..], &es384_certs[0], None)
         .unwrap();
@@ -662,6 +699,7 @@ async fn test_allowed_list_hashes_async() {
     let ps384_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ps384.pub"));
     let ps512_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ps512.pub"));
     let es256_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es256.pub"));
+    let es256k_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es256k.pub"));
     let es384_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es384.pub"));
     let es512_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/es512.pub"));
     let ed25519_certs = cert_ders_from_pem(include_bytes!("../fixtures/raw_signature/ed25519.pub"));
@@ -673,6 +711,8 @@ async fn test_allowed_list_hashes_async() {
     ctp.check_certificate_trust(&ps512_certs[1..], &ps512_certs[0], None)
         .unwrap();
     ctp.check_certificate_trust(&es256_certs[1..], &es256_certs[0], None)
+        .unwrap();
+    ctp.check_certificate_trust(&es256k_certs[1..], &es256k_certs[0], None)
         .unwrap();
     ctp.check_certificate_trust(&es384_certs[1..], &es384_certs[0], None)
         .unwrap();

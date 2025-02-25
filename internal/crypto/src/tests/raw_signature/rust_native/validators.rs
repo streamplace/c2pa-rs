@@ -81,6 +81,21 @@ fn es256_bad_data() {
     all(target_arch = "wasm32", not(target_os = "wasi")),
     wasm_bindgen_test
 )]
+fn es256k() {
+    let signature = include_bytes!("../../fixtures/raw_signature/es256k.raw_sig");
+    println!("signature as hex = {:02x?}", signature);
+    let pub_key = include_bytes!("../../fixtures/raw_signature/es256k.pub_key");
+
+    let validator = rust_native::validators::validator_for_signing_alg(SigningAlg::Es256k).unwrap();
+
+    validator.validate(signature, SAMPLE_DATA, pub_key).unwrap();
+}
+
+#[test]
+#[cfg_attr(
+    all(target_arch = "wasm32", not(target_os = "wasi")),
+    wasm_bindgen_test
+)]
 fn es384() {
     let signature = include_bytes!("../../fixtures/raw_signature/es384.raw_sig");
     let pub_key = include_bytes!("../../fixtures/raw_signature/es384.pub_key");

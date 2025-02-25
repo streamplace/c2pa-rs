@@ -23,6 +23,7 @@ use crate::raw_signature::{SigningAlg, UnknownAlgorithmError};
 )]
 fn alg_from_str() {
     assert_eq!("es256".parse(), Ok(SigningAlg::Es256));
+    assert_eq!("es256k".parse(), Ok(SigningAlg::Es256k));
     assert_eq!("es384".parse(), Ok(SigningAlg::Es384));
     assert_eq!("es512".parse(), Ok(SigningAlg::Es512));
     assert_eq!("ps256".parse(), Ok(SigningAlg::Ps256));
@@ -41,6 +42,7 @@ fn alg_from_str() {
 )]
 fn signing_alg_impl_display() {
     assert_eq!(format!("{}", SigningAlg::Es256), "es256");
+    assert_eq!(format!("{}", SigningAlg::Es256k), "es256k");
     assert_eq!(format!("{}", SigningAlg::Es384), "es384");
     assert_eq!(format!("{}", SigningAlg::Es512), "es512");
     assert_eq!(format!("{}", SigningAlg::Ps256), "ps256");

@@ -35,6 +35,11 @@ pub(crate) fn cert_chain_and_private_key_for_alg(alg: SigningAlg) -> (Vec<u8>, V
             include_bytes!("../../../../sdk/tests/fixtures/certs/es256.pem").to_vec(),
         ),
 
+        SigningAlg::Es256k => (
+            include_bytes!("../../../../sdk/tests/fixtures/certs/es256k.pub").to_vec(),
+            include_bytes!("../../../../sdk/tests/fixtures/certs/es256k.pem").to_vec(),
+        ),
+
         SigningAlg::Es384 => (
             include_bytes!("../../../../sdk/tests/fixtures/certs/es384.pub").to_vec(),
             include_bytes!("../../../../sdk/tests/fixtures/certs/es384.pem").to_vec(),

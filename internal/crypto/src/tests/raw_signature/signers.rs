@@ -44,6 +44,32 @@ fn es256() {
 #[test]
 // #[cfg_attr(all(target_arch = "wasm32", not(target_os = "wasi")), wasm_bindgen_test)]
 #[cfg(not(target_arch = "wasm32"))]
+fn es256k() {
+    let cert_chain = include_bytes!("../fixtures/raw_signature/es256k.pub");
+    let private_key = include_bytes!("../fixtures/raw_signature/es256k.priv");
+
+    let signer =
+        signer_from_cert_chain_and_private_key(cert_chain, private_key, SigningAlg::Es256k, None)
+            .unwrap();
+
+    let data = b"some sample content to sign";
+    let signature = signer.sign(data).unwrap();
+
+
+    println!("signature len = {}", signature.len());
+    println!("signature hex = {:02x?}", signature);
+    assert!(signature.len() <= signer.reserve_size());
+
+    let pub_key = include_bytes!("../fixtures/raw_signature/es256k.pub_key");
+
+    let validator = validator_for_signing_alg(SigningAlg::Es256k).unwrap();
+    validator.validate(&signature, data, pub_key).unwrap();
+    panic!("signature hex = {:02x?}", signature);
+}
+
+#[test]
+// #[cfg_attr(all(target_arch = "wasm32", not(target_os = "wasi")), wasm_bindgen_test)]
+#[cfg(not(target_arch = "wasm32"))]
 fn es384() {
     let cert_chain = include_bytes!("../fixtures/raw_signature/es384.pub");
     let private_key = include_bytes!("../fixtures/raw_signature/es384.priv");

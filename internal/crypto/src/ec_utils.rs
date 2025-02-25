@@ -25,7 +25,7 @@ use x509_parser::{
 };
 
 use crate::raw_signature::{
-    oids::{EC_PUBLICKEY_OID, PRIME256V1_OID, SECP384R1_OID, SECP521R1_OID},
+    oids::{EC_PUBLICKEY_OID, PRIME256V1_OID, SECP256K1_OID, SECP384R1_OID, SECP521R1_OID},
     RawSignerError,
 };
 
@@ -33,6 +33,9 @@ use crate::raw_signature::{
 pub(crate) enum EcdsaCurve {
     /// NIST curve P-256
     P256,
+
+    /// curve secp256k1
+    K256,
 
     /// NIST curve P-384
     P384,
@@ -46,6 +49,7 @@ impl EcdsaCurve {
     pub fn p1363_sig_len(&self) -> usize {
         match self {
             EcdsaCurve::P256 => 64,
+            EcdsaCurve::K256 => 64,
             EcdsaCurve::P384 => 96,
             EcdsaCurve::P521 => 132,
         }
@@ -140,6 +144,8 @@ pub(crate) fn ec_curve_from_public_key_der(public_key: &[u8]) -> Option<EcdsaCur
             // Find supported curve.
             if named_curve_oid == PRIME256V1_OID {
                 return Some(EcdsaCurve::P256);
+            } else if named_curve_oid == SECP256K1_OID {
+                return Some(EcdsaCurve::K256);
             } else if named_curve_oid == SECP384R1_OID {
                 return Some(EcdsaCurve::P384);
             } else if named_curve_oid == SECP521R1_OID {
@@ -158,11 +164,14 @@ pub(crate) fn ec_curve_from_private_key_der(private_key: &[u8]) -> Option<EcdsaC
     let ec_key = PrivateKeyInfo::from_der(private_key).ok()?;
 
     let p256_oid = pkcs8::ObjectIdentifier::from_der(&PRIME256V1_OID.to_der_vec().ok()?).ok()?;
+    let k256_oid = pkcs8::ObjectIdentifier::from_der(&SECP256K1_OID.to_der_vec().ok()?).ok()?;
     let p384_oid = pkcs8::ObjectIdentifier::from_der(&SECP384R1_OID.to_der_vec().ok()?).ok()?;
     let p521_oid = pkcs8::ObjectIdentifier::from_der(&SECP521R1_OID.to_der_vec().ok()?).ok()?;
 
     if ec_key.algorithm.assert_parameters_oid(p256_oid).is_ok() {
         return Some(EcdsaCurve::P256);
+    } else if ec_key.algorithm.assert_parameters_oid(k256_oid).is_ok() {
+        return Some(EcdsaCurve::K256);
     } else if ec_key.algorithm.assert_parameters_oid(p384_oid).is_ok() {
         return Some(EcdsaCurve::P384);
     } else if ec_key.algorithm.assert_parameters_oid(p521_oid).is_ok() {

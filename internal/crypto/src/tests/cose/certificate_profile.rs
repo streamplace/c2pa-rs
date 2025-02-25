@@ -54,11 +54,13 @@ fn cert_algorithms() {
     let mut validation_log = DetailedStatusTracker::default();
 
     let es256_cert = x509_der_from_pem(include_bytes!("../fixtures/raw_signature/es256.pub"));
+    let es256k_cert = x509_der_from_pem(include_bytes!("../fixtures/raw_signature/es256k.pub"));
     let es384_cert = x509_der_from_pem(include_bytes!("../fixtures/raw_signature/es384.pub"));
     let es512_cert = x509_der_from_pem(include_bytes!("../fixtures/raw_signature/es512.pub"));
     let ps256_cert = x509_der_from_pem(include_bytes!("../fixtures/raw_signature/ps256.pub"));
 
     check_certificate_profile(&es256_cert, &ctp, &mut validation_log, None).unwrap();
+    check_certificate_profile(&es256k_cert, &ctp, &mut validation_log, None).unwrap();
     check_certificate_profile(&es384_cert, &ctp, &mut validation_log, None).unwrap();
     check_certificate_profile(&es512_cert, &ctp, &mut validation_log, None).unwrap();
     check_certificate_profile(&ps256_cert, &ctp, &mut validation_log, None).unwrap();
