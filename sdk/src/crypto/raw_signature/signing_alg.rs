@@ -95,7 +95,7 @@ impl fmt::Display for SigningAlg {
 /// This error is thrown when converting from a string to [`SigningAlg`]
 /// if the algorithm string is unrecognized.
 ///
-/// The string must be one of "es256", "es384", "es512", "ps256", "ps384",
+/// The string must be one of "es256", "es256k", "es384", "es512", "ps256", "ps384",
 /// "ps512", or "ed25519".
 pub struct UnknownAlgorithmError(pub String);
 

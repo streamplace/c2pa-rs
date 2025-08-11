@@ -117,3 +117,69 @@ async fn es512() {
         .await
         .unwrap();
 }
+
+#[cfg_attr(
+    all(target_arch = "wasm32", not(target_os = "wasi")),
+    wasm_bindgen_test
+)]
+#[cfg_attr(target_os = "wasi", wstd::test)]
+async fn es256k() {
+    let signature =
+        include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.raw_sig");
+    let pub_key = include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.pub_key");
+
+    let validator = async_validator_for_signing_alg(SigningAlg::Es256K).unwrap();
+
+    validator
+        .validate_async(signature, SAMPLE_DATA, pub_key)
+        .await
+        .unwrap();
+}
+
+#[cfg_attr(
+    all(target_arch = "wasm32", not(target_os = "wasi")),
+    wasm_bindgen_test
+)]
+#[cfg_attr(target_os = "wasi", wstd::test)]
+async fn es256k_bad_signature() {
+    let mut signature =
+        include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.raw_sig").to_vec();
+    assert_ne!(signature[10], 10);
+    signature[10] = 10;
+
+    let pub_key = include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.pub_key");
+
+    let validator = async_validator_for_signing_alg(SigningAlg::Es256K).unwrap();
+
+    assert_eq!(
+        validator
+            .validate_async(&signature, SAMPLE_DATA, pub_key)
+            .await
+            .unwrap_err(),
+        RawSignatureValidationError::SignatureMismatch
+    );
+}
+
+#[cfg_attr(
+    all(target_arch = "wasm32", not(target_os = "wasi")),
+    wasm_bindgen_test
+)]
+#[cfg_attr(target_os = "wasi", wstd::test)]
+async fn es256k_bad_data() {
+    let signature =
+        include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.raw_sig");
+    let pub_key = include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.pub_key");
+
+    let mut data = SAMPLE_DATA.to_vec();
+    data[10] = 0;
+
+    let validator = async_validator_for_signing_alg(SigningAlg::Es256K).unwrap();
+
+    assert_eq!(
+        validator
+            .validate_async(signature, &data, pub_key)
+            .await
+            .unwrap_err(),
+        RawSignatureValidationError::SignatureMismatch
+    );
+}

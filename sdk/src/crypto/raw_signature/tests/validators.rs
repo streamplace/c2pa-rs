@@ -87,6 +87,65 @@ fn es256_bad_data() {
     all(target_arch = "wasm32", not(target_os = "wasi")),
     wasm_bindgen_test
 )]
+fn es256k() {
+    let signature =
+        include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.raw_sig");
+    let pub_key = include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.pub_key");
+
+    let validator = validator_for_signing_alg(SigningAlg::Es256K).unwrap();
+
+    validator.validate(signature, SAMPLE_DATA, pub_key).unwrap();
+}
+
+#[test]
+#[cfg_attr(
+    all(target_arch = "wasm32", not(target_os = "wasi")),
+    wasm_bindgen_test
+)]
+fn es256k_bad_signature() {
+    let mut signature =
+        include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.raw_sig").to_vec();
+    assert_ne!(signature[10], 10);
+    signature[10] = 10;
+
+    let pub_key = include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.pub_key");
+
+    let validator = validator_for_signing_alg(SigningAlg::Es256K).unwrap();
+
+    assert_eq!(
+        validator
+            .validate(&signature, SAMPLE_DATA, pub_key)
+            .unwrap_err(),
+        RawSignatureValidationError::SignatureMismatch
+    );
+}
+
+#[test]
+#[cfg_attr(
+    all(target_arch = "wasm32", not(target_os = "wasi")),
+    wasm_bindgen_test
+)]
+fn es256k_bad_data() {
+    let signature =
+        include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.raw_sig");
+    let pub_key = include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.pub_key");
+
+    let mut data = SAMPLE_DATA.to_vec();
+    data[10] = 0;
+
+    let validator = validator_for_signing_alg(SigningAlg::Es256K).unwrap();
+
+    assert_eq!(
+        validator.validate(signature, &data, pub_key).unwrap_err(),
+        RawSignatureValidationError::SignatureMismatch
+    );
+}
+
+#[test]
+#[cfg_attr(
+    all(target_arch = "wasm32", not(target_os = "wasi")),
+    wasm_bindgen_test
+)]
 fn es384() {
     let signature = include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es384.raw_sig");
     let pub_key = include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es384.pub_key");

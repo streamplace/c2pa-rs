@@ -544,6 +544,21 @@ pub mod tests {
         .unwrap();
 
         assert_eq!(validated, true);
+
+        let sig_es256k_bytes = include_bytes!("../../tests/fixtures/sig_es256k.data");
+        let data_es256k_bytes = include_bytes!("../../tests/fixtures/data_es256k.data");
+        let key_es256k_bytes = include_bytes!("../../tests/fixtures/key_es256k.data");
+
+        let validated = validate_async(
+            SigningAlg::Es256K,
+            sig_es256k_bytes,
+            data_es256k_bytes,
+            key_es256k_bytes,
+        )
+        .await
+        .unwrap();
+
+        assert_eq!(validated, true);
     }
 
     #[cfg_attr(not(target_arch = "wasm32"), test)]
