@@ -19,6 +19,7 @@ use ecdsa::{
     signature::{hazmat::PrehashVerifier, Verifier as EcdsaVerifier},
     Signature as EcdsaSignature, SignatureBytes, SignatureWithOid, ECDSA_SHA256_OID,
 };
+use k256::{ecdsa::VerifyingKey as K256VerifyingKey, PublicKey as K256PublicKey, Secp256k1};
 use p256::{ecdsa::VerifyingKey as P256VerifyingKey, NistP256, PublicKey as P256PublicKey};
 use p384::{ecdsa::VerifyingKey as P384VerifyingKey, NistP384, PublicKey as P384PublicKey};
 use p521::{ecdsa::VerifyingKey as P521VerifyingKey, NistP521, PublicKey as P521PublicKey};
@@ -34,6 +35,9 @@ use crate::crypto::{
 pub enum EcdsaValidator {
     /// ECDSA with SHA-256
     Es256,
+
+    /// ECDSA with SHA-256 and Koblitz curve
+    Es256K,
 
     /// ECDSA with SHA-384
     Es384,
@@ -51,6 +55,12 @@ impl RawSignatureValidator for EcdsaValidator {
     ) -> Result<(), RawSignatureValidationError> {
         let digest = match self {
             EcdsaValidator::Es256 => {
+                let mut hasher = Sha256::new();
+                hasher.update(data);
+                hasher.finalize().to_vec()
+            }
+
+            EcdsaValidator::Es256K => {
                 let mut hasher = Sha256::new();
                 hasher.update(data);
                 hasher.finalize().to_vec()
@@ -86,6 +96,17 @@ impl RawSignatureValidator for EcdsaValidator {
                     .map_err(|_| RawSignatureValidationError::InvalidSignature)?;
 
                 let vk = P256VerifyingKey::from_public_key_der(public_key)
+                    .map_err(|_| RawSignatureValidationError::InvalidPublicKey)?;
+
+                vk.verify_prehash(&digest, &signature)
+            }
+
+            EcdsaCurve::P256K => {
+                use k256::pkcs8::DecodePublicKey;
+                let signature = EcdsaSignature::from_slice(&adjusted_sig)
+                    .map_err(|_| RawSignatureValidationError::InvalidSignature)?;
+
+                let vk = K256VerifyingKey::from_public_key_der(public_key)
                     .map_err(|_| RawSignatureValidationError::InvalidPublicKey)?;
 
                 vk.verify_prehash(&digest, &signature)

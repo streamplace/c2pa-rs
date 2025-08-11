@@ -419,6 +419,17 @@ pub async fn validate_async(alg: SigningAlg, sig: &[u8], data: &[u8], pkey: &[u8
             )
             .await
         }
+        SigningAlg::Es256K => {
+            async_validate(
+                "ECDSA".to_string(),
+                "SHA-256".to_string(),
+                0,
+                pkey.to_vec(),
+                sig.to_vec(),
+                data.to_vec(),
+            )
+            .await
+        }
         SigningAlg::Es384 => {
             async_validate(
                 "ECDSA".to_string(),

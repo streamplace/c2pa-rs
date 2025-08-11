@@ -16,6 +16,7 @@ use std::str::FromStr;
 use asn1_rs::{Any, BitString, DerSequence, FromDer, Sequence};
 use der::{Decode, Encode};
 use ecdsa::signature::Signer;
+use k256::ecdsa::{Signature as K256Signature, SigningKey as K256SigningKey};
 use p256::ecdsa::{Signature as P256Signature, SigningKey as P256SigningKey};
 use p384::ecdsa::{Signature as P384Signature, SigningKey as P384SigningKey};
 use p521::ecdsa::{Signature as P512Signature, SigningKey as P512SigningKey};
@@ -32,6 +33,7 @@ use crate::crypto::{
 
 enum EcdsaSigningAlg {
     Es256,
+    Es256K,
     Es384,
     Es512,
 }
@@ -39,6 +41,7 @@ enum EcdsaSigningAlg {
 // Signing keys for ES256, ES384, and ES512 are different types
 pub enum EcdsaSigningKey {
     Es256(P256SigningKey),
+    Es256K(K256SigningKey),
     Es384(P384SigningKey),
     Es512(P512SigningKey),
 }
@@ -85,6 +88,14 @@ impl EcdsaSigner {
                 })?;
                 (EcdsaSigningKey::Es256(key), EcdsaSigningAlg::Es256)
             }
+            SigningAlg::Es256K => {
+                let key = K256SigningKey::from_pkcs8_pem(private_key_pem).map_err(|e| {
+                    RawSignerError::InvalidSigningCredentials(format!(
+                        "invalid ES256K private key: {e}"
+                    ))
+                })?;
+                (EcdsaSigningKey::Es256K(key), EcdsaSigningAlg::Es256K)
+            }
             SigningAlg::Es384 => {
                 let key = P384SigningKey::from_pkcs8_pem(private_key_pem).map_err(|e| {
                     RawSignerError::InvalidSigningCredentials(format!(
@@ -122,6 +133,10 @@ impl RawSigner for EcdsaSigner {
                 let signature: P256Signature = key.sign(data);
                 Ok(signature.to_vec())
             }
+            EcdsaSigningKey::Es256K(ref key) => {
+                let signature: K256Signature = key.sign(data);
+                Ok(signature.to_vec())
+            }
             EcdsaSigningKey::Es384(ref key) => {
                 let signature: P384Signature = key.sign(data);
                 Ok(signature.to_vec())
@@ -136,6 +151,7 @@ impl RawSigner for EcdsaSigner {
     fn alg(&self) -> SigningAlg {
         match self.alg {
             EcdsaSigningAlg::Es256 => SigningAlg::Es256,
+            EcdsaSigningAlg::Es256K => SigningAlg::Es256K,
             EcdsaSigningAlg::Es384 => SigningAlg::Es384,
             EcdsaSigningAlg::Es512 => SigningAlg::Es512,
         }

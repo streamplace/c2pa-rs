@@ -48,6 +48,31 @@ fn es256() {
     all(target_arch = "wasm32", not(target_os = "wasi")),
     wasm_bindgen_test
 )]
+fn es256k() {
+    let cert_chain = include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.pub");
+    let private_key = include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.priv");
+
+    let signer =
+        signer_from_cert_chain_and_private_key(cert_chain, private_key, SigningAlg::Es256K, None)
+            .unwrap();
+
+    let data = b"some sample content to sign";
+    let signature = signer.sign(data).unwrap();
+
+    println!("signature len = {}", signature.len());
+    assert!(signature.len() <= signer.reserve_size());
+
+    let pub_key = include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es256k.pub_key");
+
+    let validator = validator_for_signing_alg(SigningAlg::Es256K).unwrap();
+    validator.validate(&signature, data, pub_key).unwrap();
+}
+
+#[test]
+#[cfg_attr(
+    all(target_arch = "wasm32", not(target_os = "wasi")),
+    wasm_bindgen_test
+)]
 fn es384() {
     let cert_chain = include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es384.pub");
     let private_key = include_bytes!("../../../../tests/fixtures/crypto/raw_signature/es384.priv");

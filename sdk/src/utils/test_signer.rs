@@ -102,6 +102,11 @@ pub(crate) fn cert_chain_and_private_key_for_alg(
             include_bytes!("../../tests/fixtures/certs/es256.pem"),
         ),
 
+        SigningAlg::Es256K => (
+            include_bytes!("../../tests/fixtures/certs/es256k.pub"),
+            include_bytes!("../../tests/fixtures/certs/es256k.pem"),
+        ),
+
         SigningAlg::Es384 => (
             include_bytes!("../../tests/fixtures/certs/es384.pub"),
             include_bytes!("../../tests/fixtures/certs/es384.pem"),

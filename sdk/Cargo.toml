@@ -57,6 +57,7 @@ rust_native_crypto = [
     "dep:p256",
     "dep:p384",
     "dep:p521",
+    "dep:k256",
     "dep:pkcs1",
     "dep:rsa",
     "dep:spki",
@@ -149,6 +150,11 @@ num-bigint-dig = { version = "0.8.4", optional = true }
 p256 = { version = "0.13.2", optional = true }
 p384 = { version = "0.13.0", optional = true }
 p521 = { version = "0.13.3", features = [
+    "pkcs8",
+    "digest",
+    "ecdsa",
+], optional = true }
+k256 = { version = "0.13.3", features = [
     "pkcs8",
     "digest",
     "ecdsa",

@@ -26,6 +26,9 @@ pub enum EcdsaValidator {
     /// ECDSA with SHA-256
     Es256,
 
+    /// ECDSA with SHA-256 on secp256k1 curve
+    Es256K,
+
     /// ECDSA with SHA-384
     Es384,
 
@@ -47,6 +50,7 @@ impl RawSignatureValidator for EcdsaValidator {
 
         let mut verifier = match self {
             Self::Es256 => Verifier::new(MessageDigest::sha256(), &key)?,
+            Self::Es256K => Verifier::new(MessageDigest::sha256(), &key)?,
             Self::Es384 => Verifier::new(MessageDigest::sha384(), &key)?,
             Self::Es512 => Verifier::new(MessageDigest::sha512(), &key)?,
         };
@@ -55,6 +59,7 @@ impl RawSignatureValidator for EcdsaValidator {
         // matches one of the expected P1363 signature sizes.
         let is_p1363 = match self {
             Self::Es256 => sig.len() == 64,
+            Self::Es256K => sig.len() == 64,
             Self::Es384 => sig.len() == 96,
             Self::Es512 => sig.len() == 132,
         };

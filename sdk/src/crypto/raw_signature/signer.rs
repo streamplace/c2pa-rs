@@ -302,6 +302,10 @@ pub(crate) fn test_signer(alg: SigningAlg) -> Box<dyn RawSigner> {
             include_bytes!("../../../tests/fixtures/crypto/raw_signature/es256.pub").as_slice(),
             include_bytes!("../../../tests/fixtures/crypto/raw_signature/es256.priv").as_slice(),
         ),
+        SigningAlg::Es256K => (
+            include_bytes!("../../../tests/fixtures/crypto/raw_signature/es256k.pub").as_slice(),
+            include_bytes!("../../../tests/fixtures/crypto/raw_signature/es256k.priv").as_slice(),
+        ),
         SigningAlg::Es384 => (
             include_bytes!("../../../tests/fixtures/crypto/raw_signature/es384.pub").as_slice(),
             include_bytes!("../../../tests/fixtures/crypto/raw_signature/es384.priv").as_slice(),

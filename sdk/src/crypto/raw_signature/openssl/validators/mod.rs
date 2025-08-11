@@ -34,6 +34,7 @@ pub use rsa_validator::RsaValidator;
 pub fn validator_for_signing_alg(alg: SigningAlg) -> Option<Box<dyn RawSignatureValidator>> {
     match alg {
         SigningAlg::Es256 => Some(Box::new(EcdsaValidator::Es256)),
+        SigningAlg::Es256K => Some(Box::new(EcdsaValidator::Es256K)),
         SigningAlg::Es384 => Some(Box::new(EcdsaValidator::Es384)),
         SigningAlg::Es512 => Some(Box::new(EcdsaValidator::Es512)),
         SigningAlg::Ed25519 => Some(Box::new(Ed25519Validator {})),

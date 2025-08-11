@@ -30,6 +30,7 @@ use crate::crypto::{
 
 enum EcdsaSigningAlg {
     Es256,
+    Es256K,
     Es384,
     Es512,
 }
@@ -57,6 +58,7 @@ impl EcdsaSigner {
     ) -> Result<Self, RawSignerError> {
         let alg = match alg {
             SigningAlg::Es256 => EcdsaSigningAlg::Es256,
+            SigningAlg::Es256K => EcdsaSigningAlg::Es256K,
             SigningAlg::Es384 => EcdsaSigningAlg::Es384,
             SigningAlg::Es512 => EcdsaSigningAlg::Es512,
             _ => {
@@ -123,6 +125,7 @@ impl RawSigner for EcdsaSigner {
 
         let mut signer = match self.alg {
             EcdsaSigningAlg::Es256 => Signer::new(MessageDigest::sha256(), &private_key)?,
+            EcdsaSigningAlg::Es256K => Signer::new(MessageDigest::sha256(), &private_key)?,
             EcdsaSigningAlg::Es384 => Signer::new(MessageDigest::sha384(), &private_key)?,
             EcdsaSigningAlg::Es512 => Signer::new(MessageDigest::sha512(), &private_key)?,
         };
@@ -136,6 +139,7 @@ impl RawSigner for EcdsaSigner {
     fn alg(&self) -> SigningAlg {
         match self.alg {
             EcdsaSigningAlg::Es256 => SigningAlg::Es256,
+            EcdsaSigningAlg::Es256K => SigningAlg::Es256K,
             EcdsaSigningAlg::Es384 => SigningAlg::Es384,
             EcdsaSigningAlg::Es512 => SigningAlg::Es512,
         }
