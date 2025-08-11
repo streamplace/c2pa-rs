@@ -48,6 +48,7 @@ mod cbindgen_fix {
 #[repr(C)]
 pub enum C2paSigningAlg {
     Es256,
+    Es256K,
     Es384,
     Es512,
     Ps256,
@@ -60,6 +61,7 @@ impl From<C2paSigningAlg> for SigningAlg {
     fn from(alg: C2paSigningAlg) -> Self {
         match alg {
             C2paSigningAlg::Es256 => SigningAlg::Es256,
+            C2paSigningAlg::Es256K => SigningAlg::Es256K,
             C2paSigningAlg::Es384 => SigningAlg::Es384,
             C2paSigningAlg::Es512 => SigningAlg::Es512,
             C2paSigningAlg::Ps256 => SigningAlg::Ps256,

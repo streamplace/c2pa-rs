@@ -75,6 +75,7 @@ pub fn signing_alg_from_sign1(sign1: &coset::CoseSign1) -> Result<SigningAlg, Co
             -35 => Ok(SigningAlg::Es384),
             -7 => Ok(SigningAlg::Es256),
             -8 => Ok(SigningAlg::Ed25519),
+            -47 => Ok(SigningAlg::Es256K),
             _ => Err(CoseError::UnsupportedSigningAlgorithm),
         },
 
@@ -85,6 +86,7 @@ pub fn signing_alg_from_sign1(sign1: &coset::CoseSign1) -> Result<SigningAlg, Co
             Algorithm::ES512 => Ok(SigningAlg::Es512),
             Algorithm::ES384 => Ok(SigningAlg::Es384),
             Algorithm::ES256 => Ok(SigningAlg::Es256),
+            Algorithm::ES256K => Ok(SigningAlg::Es256K),
             Algorithm::EdDSA => Ok(SigningAlg::Ed25519),
             _ => Err(CoseError::UnsupportedSigningAlgorithm),
         },

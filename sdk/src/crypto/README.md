@@ -7,6 +7,7 @@
 | C2PA `SigningAlg` | Default (*) | `feature = "rust_native_crypto"` (*) | WASM |
 | --- | --- | --- | --- |
 | `es256` | OpenSSL | `p256` | `p256` |
+| `es256k` | OpenSSL | `k256` | `k256` |
 | `es384` | OpenSSL | `p384` | `p384` |
 | `es512` | OpenSSL | OpenSSL | ❌ |
 | `ed25519` | OpenSSL | `ed25519-dalek` | `ed25519-dalek` |
@@ -22,6 +23,7 @@
 | C2PA `SigningAlg` | Default (*) | `feature = "rust_native_crypto"` (*) or WASM |
 | --- | --- | --- |
 | `es256` | OpenSSL | `p256` |
+| `es256k` | OpenSSL | `k256` |
 | `es384` | OpenSSL | `p384` |
 | `es512` | OpenSSL | `p521` |
 | `ed25519` | OpenSSL | `ed25519-dalek` |
