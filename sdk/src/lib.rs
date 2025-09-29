@@ -132,6 +132,8 @@ pub mod validation_results;
 #[doc(hidden)]
 pub mod validation_status;
 
+pub mod store;
+
 // Public exports
 #[doc(inline)]
 pub use assertions::Relationship;
@@ -197,7 +199,6 @@ pub(crate) mod reader;
 pub(crate) mod resource_store;
 pub(crate) mod salt;
 pub(crate) mod signer;
-pub(crate) mod store;
 
 pub(crate) mod utils;
 pub(crate) use utils::{cbor_types, hash_utils};
