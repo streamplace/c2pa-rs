@@ -10,3 +10,5 @@ rust-version = "1.86.0"
 
 [dependencies]
 s2pa = { path = "../s2pa", version = "0.1.0" }
+c2patool = { path = "../cli", version = "0.19.1" }
+anyhow = "1.0"

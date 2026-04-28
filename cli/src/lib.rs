@@ -584,7 +584,7 @@ fn validate_cawg(reader: &mut Reader) -> Result<()> {
     }
 }
 
-fn main() -> Result<()> {
+pub fn run() -> Result<()> {
     let args = CliArgs::parse();
 
     // set RUST_LOG=debug to get detailed debug logging
