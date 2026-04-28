@@ -1,0 +1,12 @@
+[package]
+name = "s2patool"
+version = "0.1.0"
+description = "CLI for displaying and creating S2PA manifests."
+authors = ["Streamplace contributors"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/streamplace/c2pa-rs"
+edition = "2021"
+rust-version = "1.86.0"
+
+[dependencies]
+s2pa = { path = "../s2pa", version = "0.1.0" }

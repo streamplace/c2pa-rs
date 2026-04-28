@@ -1,0 +1,12 @@
+[package]
+name = "s2pa"
+version = "0.1.0"
+description = "Simple Standard for Provenance and Authenticity — C2PA with secp256k1 (ES256K) signing and DID-based identity."
+authors = ["Streamplace contributors"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/streamplace/c2pa-rs"
+edition = "2021"
+rust-version = "1.86.0"
+
+[dependencies]
+c2pa = { workspace = true, features = ["openssl", "file_io"] }
