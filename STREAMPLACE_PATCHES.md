@@ -28,7 +28,7 @@ our `Es256k` arms need to be re-added in the new shape.
 
 ## CMAF segment (.m4s) support — `sdk/`
 
-Commit: `<filled in by next commit>`
+Commit: `d192a9d5`
 
 c2pa BMFF v3 spec admits bare CMAF segments (no `ftyp`, no `moov`), but
 upstream `bmff_io.rs` rejects them: the format dispatch list excludes
@@ -46,7 +46,7 @@ JUMBF insertion path entirely.
 
 ## CLI library extraction — `cli/`
 
-Commit: `<filled in by next commit>`
+Commit: `7c9ed7bb`
 
 Splits `cli/src/main.rs` into a library + thin bin so `s2patool` can call
 `c2patool::run()` instead of duplicating ~900 lines of CLI code.
