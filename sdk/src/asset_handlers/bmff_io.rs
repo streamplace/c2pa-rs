@@ -70,12 +70,13 @@ const FULL_BOX_TYPES: &[&str; 80] = &[
     "txtC", "mime", "uri ", "uriI", "hmhd", "sthd", "vvhd", "medc",
 ];
 
-static SUPPORTED_TYPES: [&str; 15] = [
+static SUPPORTED_TYPES: [&str; 17] = [
     "avif",
     "heif",
     "heic",
     "mp4",
     "m4a",
+    "m4s",
     "mov",
     "m4v",
     "application/mp4",
@@ -84,6 +85,7 @@ static SUPPORTED_TYPES: [&str; 15] = [
     "image/heic",
     "image/heif",
     "video/mp4",
+    "video/iso.segment",
     "video/quicktime",
     "video/x-m4v",
 ];
@@ -1568,12 +1570,15 @@ impl CAIWriter for BmffIO {
 
         // since we reached this point we must have an ordinary manifest store so we may need to truncate off
         // the update manifest
-        // get ftyp location
-        // start after ftyp
-        let ftyp_token = bmff_map.get("/ftyp").ok_or(Error::UnsupportedType)?; // todo check ftyps to make sure we support any special format requirements
-        let ftyp_info = &bmff_tree[ftyp_token[0]].data;
-        let ftyp_offset = ftyp_info.offset;
-        let ftyp_size = ftyp_info.size;
+        // get ftyp location — bare CMAF segments (.m4s) have no ftyp; in that
+        // case the c2pa-uuid goes at offset 0.
+        let (ftyp_offset, ftyp_size) = match bmff_map.get("/ftyp") {
+            Some(ftyp_token) => {
+                let ftyp_info = &bmff_tree[ftyp_token[0]].data;
+                (ftyp_info.offset, ftyp_info.size)
+            }
+            None => (0u64, 0u64),
+        };
 
         // get position to insert c2pa
         let (c2pa_start, c2pa_length) =
@@ -1947,12 +1952,15 @@ impl RemoteRefEmbed for BmffIO {
                     &mut bmff_map,
                 )?;
 
-                // get ftyp location
-                // start after ftyp
-                let ftyp_token = bmff_map.get("/ftyp").ok_or(Error::UnsupportedType)?; // todo check ftyps to make sure we support any special format requirements
-                let ftyp_info = &bmff_tree[ftyp_token[0]].data;
-                let ftyp_offset = ftyp_info.offset;
-                let ftyp_size = ftyp_info.size;
+                // get ftyp location — bare CMAF segments (.m4s) have no
+                // ftyp; in that case the xmp-uuid goes at offset 0.
+                let (ftyp_offset, ftyp_size) = match bmff_map.get("/ftyp") {
+                    Some(ftyp_token) => {
+                        let ftyp_info = &bmff_tree[ftyp_token[0]].data;
+                        (ftyp_info.offset, ftyp_info.size)
+                    }
+                    None => (0u64, 0u64),
+                };
 
                 // get position to insert xmp
                 let (xmp_start, xmp_length) =

@@ -26,6 +26,24 @@ Almost entirely additive: new `SigningAlg::Es256k` variant plus dispatch arms.
 **Conflict pattern:** if upstream restructures the alg → fn dispatch tables,
 our `Es256k` arms need to be re-added in the new shape.
 
+## CMAF segment (.m4s) support — `sdk/`
+
+Commit: `<filled in by next commit>`
+
+c2pa BMFF v3 spec admits bare CMAF segments (no `ftyp`, no `moov`), but
+upstream `bmff_io.rs` rejects them: the format dispatch list excludes
+`m4s`, and the JUMBF insertion path hard-requires `/ftyp` to compute the
+c2pa-uuid offset. Both are small additive fixes.
+
+- `sdk/src/asset_handlers/bmff_io.rs` — `SUPPORTED_TYPES` gains `m4s` +
+  `video/iso.segment`; the two `bmff_map.get("/ftyp").ok_or(...)` sites
+  fall back to offset 0 when `/ftyp` is absent (insertion at file head).
+
+**Conflict pattern:** upstream may eventually accept `m4s` natively — if
+so, the SUPPORTED_TYPES additions become redundant and can be dropped.
+The no-ftyp-fallback patch only conflicts if upstream restructures the
+JUMBF insertion path entirely.
+
 ## CLI library extraction — `cli/`
 
 Commit: `<filled in by next commit>`
