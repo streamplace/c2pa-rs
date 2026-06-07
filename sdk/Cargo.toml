@@ -7,7 +7,11 @@
 # `sdk/` stay clean. See ../STREAMPLACE_PATCHES.md.
 name = "s2pa"
 
-version.workspace = true
+# s2pa versions independently of the upstream c2pa workspace (which stays on
+# `[workspace.package].version`). This lets us cut s2pa releases between c2pa
+# releases; the upstream c2pa base for a given s2pa release is recorded in the
+# CHANGELOG, not encoded in this number.
+version = "0.1.0"
 
 description = "Simple Standard for Provenance and Authenticity — the C2PA SDK plus secp256k1 (ES256K) signing, bare CMAF (.m4s) support, and DID-based identity."
 authors = [
