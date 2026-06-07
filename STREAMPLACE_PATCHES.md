@@ -4,8 +4,38 @@ Every modification this fork makes to upstream files (`sdk/`, `cli/`, etc.) is
 tracked here. Read this before resolving merge conflicts after `git merge
 upstream/main`.
 
-Streamplace follows a wrapper-not-rename strategy: new functionality lives in
-`s2pa/` and `s2patool/`. Patches below are the unavoidable exceptions.
+The SDK is published to crates.io as **`s2pa`** (Streamplace owns that name).
+Rather than a separate wrapper crate, the `sdk/` package itself is renamed
+`c2pa → s2pa`; the rename is confined to manifests, so `sdk/` source and the
+in-tree dependents keep merging from upstream cleanly. New S2PA-specific
+surface lives in `sdk/src/{did,signing,drisl}.rs`. Patches below are the
+modifications to upstream files.
+
+## Package rename `c2pa` → `s2pa` — manifests only
+
+Publishes the patched SDK under a Streamplace-owned crates.io name without
+touching upstream source.
+
+- `sdk/Cargo.toml` — `[package].name` and `[lib].name` are `s2pa` (was `c2pa`);
+  metadata (description/repo/keywords/authors) updated. **The crate source is
+  untouched** — internal references use `crate::`, so upstream `sdk/` merges
+  are unaffected.
+- Every in-workspace dependent keeps `use c2pa::…` via cargo's dependency
+  rename: `c2pa = { package = "s2pa", path = "…/sdk", … }` in
+  `cli/`, `c2pa_c_ffi/`, `export_schema/`, `make_test_images/`, and the
+  `[workspace.dependencies]` entry. Their source is unchanged.
+- New downstream consumers (and `s2patool`) depend on `s2pa` directly and
+  write `use s2pa::…`.
+- The old placeholder `s2pa/` wrapper crate is removed; its `did`/`signing`/
+  `drisl` modules now live in `sdk/src/`.
+
+**Conflict pattern:** the only upstream conflict is the one-line
+`[package].name` (and `[lib].name`) in `sdk/Cargo.toml` — keep `s2pa`. If
+upstream adds a new crate that depends on the SDK by path, give it the same
+`package = "s2pa"` rename. **Caveat:** `sdk/`'s own doctests use
+`use c2pa::…`; under the `s2pa` lib name `cargo test --doc -p s2pa` will not
+compile them. This does not affect `cargo build`/`cargo publish` or any
+downstream consumer — it is a fork-local test-suite gap to sweep later.
 
 ## ES256K (secp256k1) signing — `sdk/`
 

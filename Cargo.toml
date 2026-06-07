@@ -7,7 +7,6 @@ members = [
     "export_schema",
     "macros",
     "make_test_images",
-    "s2pa",
     "s2patool",
     "sdk",
 ]
@@ -17,7 +16,9 @@ members = [
 version = "0.58.0"
 
 [workspace.dependencies]
-c2pa = { path = "sdk", default-features = false }
+# The SDK is published as `s2pa`; the `c2pa` key keeps in-tree `use c2pa::…`
+# working via cargo's dependency rename.
+c2pa = { package = "s2pa", path = "sdk", default-features = false }
 
 [profile.release]
 strip = true  # Automatically strip symbols from the binary.

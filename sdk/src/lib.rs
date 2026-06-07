@@ -134,6 +134,23 @@ pub mod validation_status;
 
 pub mod store;
 
+// S2PA extensions — Streamplace's additions on top of the upstream C2PA SDK.
+// (The ES256K signing alg and bare `.m4s` BMFF support are wired directly into
+// the crypto/asset_handlers internals; these modules host the higher-level
+// S2PA-specific surface.)
+
+/// DID resolution and DID-document signing identity (did:key, did:plc, did:web).
+pub mod did;
+
+/// ES256K (secp256k1) signer constructors that integrate with [`Signer`] /
+/// [`CallbackSigner`].
+pub mod signing;
+
+/// DRISL-canonical CBOR helpers for DASL-compliant manifests.
+///
+/// See <https://github.com/n0-computer/dasl>.
+pub mod drisl;
+
 // Public exports
 #[doc(inline)]
 pub use assertions::Relationship;

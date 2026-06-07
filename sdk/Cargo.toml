@@ -1,10 +1,17 @@
 [package]
-name = "c2pa"
+# Published to crates.io as `s2pa` (Streamplace owns the name). This is the
+# upstream `c2pa` SDK plus Streamplace's additive patches (ES256K signing,
+# bare `.m4s` BMFF support) and the S2PA extension modules below. The package
+# is renamed but the in-tree dependents keep `use c2pa::…` via cargo's
+# dependency-rename (`c2pa = { package = "s2pa", … }`), so upstream merges into
+# `sdk/` stay clean. See ../STREAMPLACE_PATCHES.md.
+name = "s2pa"
 
 version.workspace = true
 
-description = "Rust SDK for C2PA (Coalition for Content Provenance and Authenticity) implementors"
+description = "Simple Standard for Provenance and Authenticity — the C2PA SDK plus secp256k1 (ES256K) signing, bare CMAF (.m4s) support, and DID-based identity."
 authors = [
+    "Streamplace contributors",
     "Maurice Fisher <mfisher@adobe.com>",
     "Gavin Peacock <gpeacock@adobe.com>",
     "Eric Scouten <scouten@adobe.com>",
@@ -13,11 +20,11 @@ authors = [
     "Dylan Ross <dyross@adobe.com>",
 ]
 license = "MIT OR Apache-2.0"
-documentation = "https://docs.rs/c2pa"
-homepage = "https://contentauthenticity.org"
-repository = "https://github.com/contentauth/c2pa-rs"
+documentation = "https://docs.rs/s2pa"
+homepage = "https://github.com/streamplace/c2pa-rs"
+repository = "https://github.com/streamplace/c2pa-rs"
 readme = "../README.md"
-keywords = ["xmp", "metadata"]
+keywords = ["c2pa", "provenance", "s2pa", "metadata"]
 categories = ["api-bindings"]
 edition = "2021"
 rust-version = "1.86.0"
@@ -94,6 +101,10 @@ name = "fragmented_bmff"
 required-features = ["file_io"]
 
 [lib]
+# The crate is published as `s2pa` and the lib target matches, so downstream
+# consumers write `use s2pa::…`. In-workspace dependents that still want
+# `use c2pa::…` declare `c2pa = { package = "s2pa", … }` (dependency rename).
+name = "s2pa"
 crate-type = ["lib"]
 
 [dependencies]
